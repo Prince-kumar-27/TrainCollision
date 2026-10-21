@@ -4,24 +4,6 @@ A real-time web application that helps prevent train collisions. QR codes placed
 
 > Items in `[square brackets]` are placeholders. Fill them in with your actual values.
 
----
-
-## Table of Contents
-
-- [Overview](#overview)
-- [How It Works](#how-it-works)
-- [Features](#features)
-- [Tech Stack](#tech-stack)
-- [Project Structure](#project-structure)
-- [Getting Started](#getting-started)
-- [Environment Variables](#environment-variables)
-- [Usage](#usage)
-- [Limitations](#limitations)
-- [Future Scope](#future-scope)
-- [Author](#author)
-- [License](#license)
-
----
 
 ## Overview
 
