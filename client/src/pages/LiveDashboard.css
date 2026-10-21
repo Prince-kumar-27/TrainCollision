@@ -1,0 +1,757 @@
+/* ============================================================
+   LiveDashboard.css
+   Colour-matched to Home.css palette via CSS custom properties
+   ============================================================ */
+
+/* ── Design Tokens (mirrors Home.css palette) ────────────── */
+:root {
+  /* Backgrounds */
+  --ld-bg:                 rgb(108, 97, 110);               /* Home: .home-container background     */
+  --ld-bg-emergency:     rgba(243, 91, 197, 0.12); /* pink-tinted emergency flash        */
+  --ld-bg-header:        rgba(218, 218, 247, 0.88);/* header glass — lavender tint       */
+  --ld-bg-panel:         rgba(255, 255, 255, 0.55);/* card/panel surface                 */
+  --ld-bg-track-header:  rgba(255, 255, 255, 0.25);
+
+  /* Brand colours (pulled directly from Home.css) */
+  --ld-pink:             #f35bc5;               /* Home: .home-container color           */
+  --ld-pink-bright:      #f300df;               /* Home: .primary logo text              */
+  --ld-pink-card:        #eb16ab;               /* Home: .home-card-text title           */
+  --ld-blue:             #3b82f6;               /* Home: accent blue throughout          */
+  --ld-blue-dark:        #1d4ed8;               /* Home: logo icon gradient start        */
+  --ld-green:            #10b981;               /* Home: connection online colour        */
+  --ld-green-bright:     #02bd75;               /* Home: .home-connection-text           */
+
+  /* Semantic status */
+  --ld-normal:           #10b981;
+  --ld-normal-glow:      rgba(16, 185, 129, 0.45);
+  --ld-warning:          #f59e0b;
+  --ld-warning-glow:     rgba(245, 158, 11, 0.45);
+  --ld-critical:         #ef4444;
+  --ld-critical-glow:    rgba(239, 68, 68, 0.55);
+
+  /* Text */
+  --ld-text:             #1e1b4b;               /* deep indigo — readable on #dadaf7    */
+  --ld-text-secondary:   #001d3a;               /* Home: .home-card-text body           */
+  --ld-text-muted:       #011b41;               /* Home: stat/footer labels             */
+  --ld-text-faint:       rgba(0, 12, 29, 0.4);
+
+  /* Borders */
+  --ld-border-panel:     rgba(14, 79, 184, 0.18);
+  --ld-border-header:    rgba(59, 130, 246, 0.2);
+
+  /* Grid — same values as Home.css */
+  --ld-grid-line-h:      rgba(255, 225, 225, 0.05);
+  --ld-grid-line-v:      rgba(59, 130, 246, 0.04);
+  --ld-grid-size:        40px;
+}
+
+/* ── Keyframes ───────────────────────────────────────────── */
+@keyframes ping {
+  0%   { transform: scale(1);   opacity: 0.45; }
+  75%  { transform: scale(1.8); opacity: 0; }
+  100% { transform: scale(1.8); opacity: 0; }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.5; }
+}
+
+/* ── Page / Root ─────────────────────────────────────────── */
+.ld-root {
+  min-height: 100vh;
+  background: var(--ld-bg);
+  color: var(--ld-text);
+  display: flex;
+  flex-direction: column;
+  transition: background 1s;
+}
+.ld-root--emergency {
+  background: var(--ld-bg-emergency);
+}
+
+/* Grid overlay — same pattern as .home-grid-bg */
+.ld-grid-bg {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.6;
+  background-image:
+    linear-gradient(var(--ld-grid-line-h) 1px, transparent 1px),
+    linear-gradient(90deg, var(--ld-grid-line-v) 1px, transparent 1px);
+  background-size: var(--ld-grid-size) var(--ld-grid-size);
+}
+
+/* ── Header ──────────────────────────────────────────────── */
+.ld-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--ld-border-header);
+  background: var(--ld-bg-header);
+  box-shadow: 0 4px 24px rgba(59, 130, 246, 0.08),
+              inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.ld-back-btn {
+  background: none;
+  border: none;
+  color: var(--ld-text);
+  cursor: pointer;
+  font-size: 18px;
+  padding: 4px 8px;
+  border-radius: 8px;
+  transition: background 0.15s;
+}
+.ld-back-btn:hover {
+  background: rgba(59, 130, 246, 0.08);
+}
+
+/* Logo — mirrors .home-logo-text */
+.ld-logo {
+  font-weight: 900;
+  font-size: 13px;
+  letter-spacing: 4px;
+  color: var(--ld-pink-bright);
+}
+
+.ld-subtitle {
+  font-size: 11px;
+  color: var(--ld-blue);
+  font-family: monospace;
+  letter-spacing: 3px;
+}
+
+.ld-header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+  flex-wrap: wrap;
+}
+
+/* ── Pills ───────────────────────────────────────────────── */
+.ld-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.ld-pill--critical {
+  color: var(--ld-critical);
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  animation: pulse 1.5s infinite;
+}
+
+.ld-pill--warning {
+  color: var(--ld-warning);
+  background: rgba(245, 158, 11, 0.1);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.ld-pill--count {
+  font-family: monospace;
+  color: var(--ld-text-secondary);
+  background: rgba(59, 130, 246, 0.07);
+  border: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+/* ── Connection status — mirrors .home-connection ────────── */
+.ld-conn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-family: monospace;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+.ld-conn--live {
+  background: rgba(2, 189, 117, 0.08);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  color: var(--ld-green-bright);
+}
+.ld-conn--offline {
+  background: rgba(239, 68, 68, 0.07);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: var(--ld-critical);
+}
+
+.ld-conn-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+.ld-conn-dot--live {
+  background: var(--ld-green);
+  animation: pulse 2s infinite;
+}
+.ld-conn-dot--offline {
+  background: var(--ld-critical);
+}
+
+/* ── Weather switcher ────────────────────────────────────── */
+.ld-weather-switcher {
+  display: flex;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  background: rgba(255, 255, 255, 0.35);
+}
+
+.ld-weather-btn {
+  padding: 6px 10px;
+  font-size: 14px;
+  cursor: pointer;
+  border: none;
+  border-right: 1px solid rgba(59, 130, 246, 0.1);
+  background: transparent;
+  transition: background 0.2s;
+}
+.ld-weather-btn--active {
+  background: rgba(59, 130, 246, 0.2);
+}
+
+/* ── Main content ────────────────────────────────────────── */
+.ld-main {
+  position: relative;
+  z-index: 10;
+  flex: 1;
+  max-width: 1600px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ── Alert banner ────────────────────────────────────────── */
+.ld-alert-banner {
+  padding: 16px 20px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.09), rgba(239, 68, 68, 0.04));
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  box-shadow: 0 0 30px rgba(239, 68, 68, 0.1);
+}
+
+.ld-alert-banner__title {
+  font-weight: 900;
+  font-size: 11px;
+  letter-spacing: 4px;
+  color: var(--ld-critical);
+  margin-bottom: 8px;
+  font-family: monospace;
+}
+
+.ld-alert-banner__msg {
+  font-size: 14px;
+  color: #b91c1c;
+  margin-top: 3px;
+}
+
+/* ── Grids ───────────────────────────────────────────────── */
+.ld-tracks-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.ld-bottom-grid {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 16px;
+}
+
+/* ── Shared panel — mirrors .home-stat card ──────────────── */
+.ld-panel {
+  padding: 20px;
+  border-radius: 20px;
+  background: var(--ld-bg-panel);
+  border: 1px solid var(--ld-border-panel);
+  box-shadow: 0 4px 24px rgba(59, 130, 246, 0.07),
+              inset 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+
+.ld-panel-label {
+  font-size: 10px;
+  font-family: monospace;
+  color: var(--ld-text-muted);
+  letter-spacing: 4px;
+}
+
+/* ── Event Log ───────────────────────────────────────────── */
+.ld-event-log__header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.ld-event-log__count {
+  font-size: 10px;
+  font-family: monospace;
+  color: var(--ld-text-muted);
+}
+
+.ld-event-log__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 0;
+  gap: 10px;
+}
+
+.ld-event-log__empty-icon  { font-size: 36px; opacity: 0.3; }
+
+.ld-event-log__empty-text {
+  font-size: 12px;
+  font-family: monospace;
+  color: var(--ld-text-muted);
+  opacity: 0.6;
+}
+
+.ld-event-log__list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.ld-event-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 9px 12px;
+  border-radius: 10px;
+  font-size: 12px;
+}
+
+.ld-event-item--critical {
+  background: rgba(239, 68, 68, 0.07);
+  border: 1px solid rgba(239, 68, 68, 0.22);
+}
+
+.ld-event-item--warning {
+  background: rgba(245, 158, 11, 0.07);
+  border: 1px solid rgba(245, 158, 11, 0.22);
+}
+
+.ld-event-item__icon  { flex-shrink: 0; }
+
+.ld-event-item__msg   { flex: 1; line-height: 1.5; }
+
+/* Darker shades for readability on light background */
+.ld-event-item__msg--critical { color: #b91c1c; }
+.ld-event-item__msg--warning  { color: #92400e; }
+
+.ld-event-item__time {
+  font-family: monospace;
+  font-size: 10px;
+  color: var(--ld-text-muted);
+  flex-shrink: 0;
+}
+
+/* ── System Status ───────────────────────────────────────── */
+.ld-status-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  
+}
+
+.ld-stat-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.ld-stat-card {
+  padding: 12px;
+  border-radius: 12px;
+}
+
+.ld-stat-card__value {
+  font-size: 22px;
+  font-weight: 900;
+  font-family: monospace;
+}
+
+.ld-stat-card__label {
+  font-size: 10px;
+  color: black;
+  margin-top: 2px;
+}
+
+/* Weather thresholds */
+.ld-weather-section__title {
+  font-size: 10px;
+  font-family: monospace;
+  color: rgb(48, 0, 29);
+  letter-spacing: 3px;
+  margin-bottom: 10px;
+}
+
+.ld-weather-section__row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.ld-weather-section__label { font-size: 14px; }
+
+.ld-weather-section__thresholds {
+  display: flex;
+  gap: 12px;
+  font-size: 11px;
+  font-family: monospace;
+}
+
+.ld-threshold--warning  { color: var(--ld-warning); }
+.ld-threshold--critical { color: var(--ld-critical); }
+
+/* Risk bar */
+.ld-risk-bar-track {
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(59, 130, 246, 0.1);
+  overflow: hidden;
+}
+
+.ld-risk-bar-fill {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.5s, background 0.5s;
+}
+
+.ld-risk-bar-fill--nominal {
+  width: 8%;
+  background: var(--ld-green);
+  box-shadow: 0 0 8px rgba(16, 185, 129, 0.35);
+}
+
+.ld-risk-bar-fill--warning {
+  width: 55%;
+  background: linear-gradient(90deg, var(--ld-green), var(--ld-warning));
+  box-shadow: 0 0 8px rgba(16, 185, 129, 0.35);
+}
+
+.ld-risk-bar-fill--critical {
+  width: 100%;
+  background: linear-gradient(90deg, var(--ld-warning), var(--ld-critical));
+  box-shadow: 0 0 8px rgba(239, 68, 68, 0.5);
+}
+
+.ld-risk-label {
+  font-size: 9px;
+  font-family: monospace;
+  color: var(--ld-text-muted);
+  margin-top: 6px;
+}
+
+.ld-tick {
+  font-size: 9px;
+  font-family: monospace;
+  color: var(--ld-text-faint);
+  text-align: center;
+  letter-spacing: 2px;
+  margin-top: auto;
+}
+
+/* ============================================================
+   TrackCard  (tc-*)
+   ============================================================ */
+.tc-card {
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid var(--ld-border-panel);
+  background: linear-gradient(rgb(233, 209, 233) , rgb(203, 250, 253));
+  transition: box-shadow 0.5s, transform 0.2s;
+}
+.tc-card:hover {
+  transform: translateY(-2px);           /* mirrors .home-card:hover */
+}
+
+.tc-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-bottom: 1px solid rgba(17, 108, 255, 0.1);
+  background: rgb(248, 239, 239);
+}
+
+.tc-header__left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tc-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.tc-name {
+  font-weight: 700;
+  font-size: 13px;
+  color: rgb(65, 0, 0)
+}
+
+.tc-badge {
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 999px;
+}
+
+.tc-badge--emergency,
+.tc-badge--critical {
+  color: var(--ld-critical);
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  animation: pulse 1.5s infinite;
+}
+
+.tc-badge--warning {
+  color: var(--ld-warning);
+  background: rgba(245, 158, 11, 0.1);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.tc-header__right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tc-train-count {
+  font-size: 11px;
+  font-family: monospace;
+  color: var(--ld-text-muted);
+}
+
+.tc-btn-brake {
+  font-size: 14px;
+  padding: 2px 7px;
+  border-radius: 8px;
+  cursor: pointer;
+  background: rgba(239, 68, 68, 0.07);
+  color: rgba(239, 68, 68, 0.6);
+  border: 1px solid rgba(239, 68, 68, 0.18);
+  transition: background 0.2s;
+}
+.tc-btn-brake:hover { background: rgba(239, 68, 68, 0.14); }
+
+.tc-btn-clear {
+  font-size: 9px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  background: rgba(2, 189, 117, 0.1);
+  color: var(--ld-green-bright);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  transition: background 0.2s;
+}
+.tc-btn-clear:hover { background: rgba(2, 189, 117, 0.18); }
+
+.tc-track-wrap { padding: 16px 16px 8px; }
+
+.tc-track-vis {
+  position: relative;
+  height: 52px;
+  border-radius: 8px;
+  overflow: visible;
+}
+
+.tc-km-ruler {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 4px;
+  padding: 0 2px;
+}
+
+.tc-km-label {
+  font-size: 9px;
+  font-family: monospace;
+  color: var(--ld-text-muted);
+  opacity: 0.5;
+}
+
+.tc-station-tick {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.tc-station-tick__line {
+  width: 1px;
+  height: 8px;
+  margin-bottom: 2px;
+  opacity: 0.35;
+}
+
+.tc-train-list { padding: 0 16px 16px; }
+
+.tc-train-list__empty {
+  font-size: 10px;
+  font-family: monospace;
+  color: rgb(151, 0, 118);
+  text-align: center;
+  padding: 8px 0;
+  opacity: 1;
+}
+
+.tc-train-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.tc-train-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 12px;
+  border-radius: 10px;
+}
+
+.tc-train-row__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.tc-train-row__name {
+  font-weight: 600;
+  font-size: 12px;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: rgb(24, 0, 0);
+}
+
+.tc-train-row__status {
+  font-size: 10px;
+  font-family: monospace;
+  opacity: 0.85;
+}
+
+.tc-train-row__pos {
+  font-size: 13px;
+  font-weight: 700;
+  font-family: monospace;
+  color: var(--ld-text);
+}
+
+.tc-train-row__speed {
+  font-size: 10px;
+  font-family: monospace;
+  color: var(--ld-text-muted);
+}
+
+/* ============================================================
+   TrainMarker  (tm-*)
+   ============================================================ */
+.tm-wrap {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  transition: left 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  z-index: 20;
+}
+
+.tm-ping {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  top: -8px;
+  left: -8px;
+  border-radius: 50%;
+  opacity: 0.45;
+  animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+.tm-glow {
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  top: -6px;
+  left: -6px;
+  border-radius: 50%;
+  filter: blur(6px);
+}
+
+.tm-body {
+  position: relative;
+  width: 26px;
+  height: 22px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+}
+
+.tm-label {
+  position: absolute;
+  bottom: -22px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 8px;
+  font-weight: 700;
+  white-space: nowrap;
+  padding: 1px 5px;
+  border-radius: 999px;
+}
+
+/* ============================================================
+   DistanceBridge  (db-*)
+   ============================================================ */
+.db-wrap {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  pointer-events: none;
+}
+
+.db-line {
+  position: relative;
+  width: 100%;
+  height: 1px;
+}
+
+.db-dist-label {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: -16px;
+  font-size: 9px;
+  font-weight: 700;
+  white-space: nowrap;
+  padding: 1px 5px;
+  border-radius: 6px;
+}

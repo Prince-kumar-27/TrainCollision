@@ -1,0 +1,19 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: #b065e2;
+  color: #e2e8f0;
+  font-family: system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+button { font-family: inherit; }
+
+/* QR scanner cleanup */
+#nexus-qr-reader video { border-radius: 0 !important; }
+#nexus-qr-reader img[alt="Info icon"] { display: none !important; }
+#nexus-qr-reader__dashboard_section_swaplink { display: none !important; }
+
+@keyframes ping  { 75%, 100% { transform: scale(2); opacity: 0; } }
+@keyframes pulse { 0%, 100%  { opacity: 1; } 50% { opacity: 0.5; } }
+@keyframes spin  { to { transform: rotate(360deg); } }
