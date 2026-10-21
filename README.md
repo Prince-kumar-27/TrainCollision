@@ -2,7 +2,6 @@
 
 A real-time web application that helps prevent train collisions. QR codes placed at fixed points along the track act as position markers. Each train scans the markers with a camera, reports its position live to a central server, and the system raises an alert when two trains get dangerously close on the same track.
 
-> Items in `[square brackets]` are placeholders. Fill them in with your actual values.
 
 
 ## Overview
@@ -120,7 +119,7 @@ npm run dev
 
 Open the client URL shown by Vite (usually `http://localhost:5173`) and allow camera access when prompted.
 
-> Camera access in browsers requires HTTPS or `localhost`. To test on a phone, serve the client over HTTPS (e.g. with a tunnelling tool).
+> Camera access in browsers requires HTTPS or `localhost`. To test on a phone, serve the client over HTTPS 
 
 ## Environment Variables
 
